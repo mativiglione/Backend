@@ -41,5 +41,5 @@ getProducts.addProduct(
 const productFound = getProducts.getProductById("001");
 console.log("Producto encontrado:", productFound);
 
-getProducts.getProductById("002");
+getProducts.getProductById("003");
 
