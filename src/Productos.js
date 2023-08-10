@@ -52,6 +52,12 @@ export class ProductManager {
     this.writeDataToFile();
   }
 
+  async getProducts() {
+    const products = JSON.parse(await fs.readFile(this.filePath, "utf-8"));
+
+    return products;
+  }
+
   updateProduct(id, field, value) {
     const product = this.products.find((product) => product.id === id);
 
@@ -75,8 +81,9 @@ export class ProductManager {
     }
   }
 
-  getProductById(id) {
-    const product = this.products.find((product) => product.id === id);
+  async getProductById(id) {
+    const products = JSON.parse(await fs.readFile(this.filePath, "utf-8"));
+    const product = products.find((product) => product.id === id);
 
     if (product) {
       return product;
@@ -126,4 +133,4 @@ const filePath = "./src/products.json";
     "jkg656",
     50
   );
-})();
+});
