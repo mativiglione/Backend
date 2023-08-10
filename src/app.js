@@ -6,14 +6,14 @@ import { ProductManager } from './Productos.js';
 const app = express();
 const port = 4000;
 
-const filePath = './products.json';
+const filePath = './src/products.json';
 const ProductManagerInstance = new ProductManager(filePath);
 
 app.use(express.json());
 
 app.get('/products', async (req, res) => {
     const limit = req.query.limit;
-    let products = ProductManagerInstance.getProducts();
+    let products = await ProductManagerInstance.getProducts();
 
     if (limit) {
       const parsedLimit = parseInt(limit, 5);
