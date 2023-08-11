@@ -17,7 +17,7 @@ app.get("/products", async (req, res) => {
   let products = await ProductManagerInstance.getProducts();
 
   if (limit) {
-    const parsedLimit = parseInt(limit, 5);
+    const parsedLimit = parseInt(limit, 10);
     products = products.slice(0, parsedLimit);
   }
 
