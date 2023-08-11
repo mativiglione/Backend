@@ -1,6 +1,5 @@
 import express from "express";
-import fs from "fs/promises";
-
+import { promises as fs } from "fs";
 import { ProductManager } from "./Productos.js";
 
 const app = express();
@@ -11,6 +10,10 @@ const ProductManagerInstance = new ProductManager(filePath);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.send("Pagina inicial");
+});
 
 app.get("/products", async (req, res) => {
   const limit = req.query.limit;
