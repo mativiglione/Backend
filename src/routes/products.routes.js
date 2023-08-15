@@ -29,17 +29,16 @@ routerProd.post("/", async (req, res) => {
 });
 
 routerProd.put("/:id", async (req, res) => {
-  const confirmacion = await productManager.updateProduct(
-    req.params.id,
-    req.body
-  );
+  const id = parseInt(req.params.id) 
+  const confirmacion = await productManager.updateProduct(id, req.body);
 
   if (confirmacion) res.status(200).send("Producto actualizado correctamente");
   else res.status(404).send("Producto no existente");
 });
 
 routerProd.delete("/:id", async (req, res) => {
-  const confirmacion = await productManager.deleteProduct(req.params.id);
+  const id = parseInt(req.params.id) 
+  const confirmacion = await productManager.deleteProduct(id, req.params.id);
 
   if (confirmacion) res.status(200).send("Producto eliminado correctamente");
   else res.status(404).send("Producto no existente");

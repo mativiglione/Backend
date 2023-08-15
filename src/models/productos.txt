@@ -1,1 +1,1 @@
-[{"title":"Street Fighter 6","description":"Juego de pelea","price":12000,"thumbnail":"imagen.jpg","code":"qwe567","stock":20,"id":1},{"title":"NBA 2K24","description":"Juego de basket","price":15000,"thumbnail":"imagen.jpg","code":"asd234","stock":15,"id":2},{"title":"EA FC 24","description":"Juego de futbol","price":18000,"thumbnail":"imagen.jpg","code":"abc123","stock":10,"id":3},{"title":"Counter Strike","description":"Juego de disparos","price":6000,"thumbnail":"imagen.jpg","code":"jhg123","stock":8,"id":4}]
+[]
