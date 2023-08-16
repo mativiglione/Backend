@@ -1,1 +1,1 @@
-[]
+[{"title":"EA FC 24","description":"Juego de futbol","price":17000,"thumnbail":"imagen.jpg","code":"asd123","stock":20,"id":1}]
