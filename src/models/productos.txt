@@ -1,1 +1,1 @@
-[{"title":"EA FC 24","description":"Juego de futbol","price":17000,"thumnbail":"imagen.jpg","code":"asd123","stock":20,"id":1}]
+[{"title":"EA FC 24","description":"Juego de fubol","price":17000,"thumnbail":"imagen.jpg","code":"asd342","stock":20,"id":1},{"title":"NBA 2K24","description":"Juego de basket","price":15000,"thumnbail":"imagen.jpg","code":"asd123","stock":15,"id":2}]
