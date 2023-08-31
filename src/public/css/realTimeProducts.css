@@ -6,6 +6,8 @@ body {
 h1 {
   text-align: center;
   margin-top: 20px;
+  color: #37003c;
+  margin-bottom: 20px;
 }
 
 form {
@@ -14,28 +16,31 @@ form {
   padding: 20px;
   border: 1px solid black;
   border-radius: 5px;
+  text-align: center;
 }
 
 .card{
-  background-color: aqua;
+  background-color: #0be4ff;
 }
 
 label,
 input {
   display: block;
   margin-bottom: 10px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #37003c;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 input {
   width: 100%;
   padding: 8px;
-  border: 1px solid black;
 }
 
 button {
-  background-color: white;
-  color: black;
+  background-color: #37003c;
+  color: white;
+  font-weight: bold;
   padding: 10px 20px;
   border: none;
   border-radius: 3px;

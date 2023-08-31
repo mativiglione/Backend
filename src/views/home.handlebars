@@ -1,6 +1,8 @@
-<h1>Productos creados</h1>
-<ul>
+<div class="container d-flex flex-column">
+<h1 class="text-center">Productos creados</h1>
+<ul class="text-center list-unstyled">
     {{#each products}}
-      <li class="">{{this.title}} - ${{this.price}}</li>
+      <li>{{this.title}} - ${{this.price}}</li>
     {{/each}}
   </ul>
+  </div>

@@ -17,22 +17,23 @@ const server = app.listen(PORT, () => {
 
 const io = new Server(server);
 const productManager = new ProductManager("src/models/productos.txt");
+const mensajes = [];
 
 io.on("connection", (socket) => {
   console.log("Conexion con Socket.io");
 
   socket.on("nuevoProducto", async (prod) => {
-    console.log(prod)
-    
-    const confirmacion = await productManager.addProduct(prod);
+    console.log(prod);
+    await productManager.addProduct(prod);
+    const products = await productManager.getProducts();
+    socket.emit("products", products);
+  });
 
-    if(confirmacion) {
-      socket.emit("mensajeProductoCreado", "El producto fue creado");
-      io.emit("productCreated, prod");
-    } else {
-      socket.emit("mensajeProductoCreado", "No se pudo crear el producto")
-    }
-  })
+  socket.on("mensaje", (info) => {
+    console.log(info);
+    mensajes.push(info);
+    io.emit("mensajes", mensajes);
+  });
 });
 
 const storage = multer.diskStorage({
@@ -58,7 +59,7 @@ app.use("/api/carts", routerCart);
 
 app.get("/static", async (req, res) => {
   const prods = await productManager.getProducts();
-  
+
   res.render("home", {
     titulo: "Home",
     rutaCSS: "home",
@@ -67,12 +68,19 @@ app.get("/static", async (req, res) => {
   });
 });
 
-
 app.get("/static/realTimeProducts", (req, res) => {
   res.render("realTimeProducts", {
     titulo: "Productos",
     rutaCSS: "realTimeProducts",
     rutaJS: "realTimeProducts",
+  });
+});
+
+app.get("/static/chat", async (req, res) => {
+  res.render("chat", {
+    titulo: "Chat",
+    rutaJS: "chat",
+    rutaCSS: "chat",
   });
 });
 
