@@ -1,1 +1,1 @@
-[{"title":"EA FC 24","description":"Juego de futbol","category":"Deportes","price":"18000","stock":"50","code":"eafc1","id":1}]
+[{"title":"EA FC 24","description":"Juego de futbol","category":"Deportes","price":"18000","stock":"50","code":"eafc1","id":1},{"title":"NBA 2K24","description":"Juego de basket","category":"Deportes","price":"15000","stock":"50","code":"nba1","id":2},{"title":"Street Fighter 6","description":"Juego de accion","category":"Accion","price":"12000","stock":"50","code":"sf1","id":3}]
