@@ -1,15 +1,52 @@
 import { Router } from "express";
 import productModel from "../models/products.models.js";
+import { paginate } from "mongoose-paginate-v2";
 
 const productRouter = Router();
 
+productModel.plugin(paginate)
+
 productRouter.get("/", async (req, res) => {
-  const { limit } = req.query;
   try {
-    const prods = await productModel.find().limit(limit);
-    res.status(200).send({ resultado: "Productos encontrados", message: prods });
+    // Obtener los parámetros de consulta
+    const { limit = 10, page = 1, query, sort } = req.query;
+
+    // Construir la consulta
+    const filters = {};
+    if (query) {
+      filters.category = query; // Ajusta esto según tus necesidades
+    }
+
+    // Realizar la consulta con paginación
+    const options = {
+      page: Number(page),
+      limit: Number(limit),
+      sort: sort === "asc" ? "price" : sort === "desc" ? "-price" : undefined,
+    };
+
+    const result = await productModel.paginate(filters, options);
+
+    // Crear el objeto de respuesta
+    const response = {
+      status: "success",
+      payload: result.docs,
+      totalPages: result.totalPages,
+      prevPage: result.prevPage || null,
+      nextPage: result.nextPage || null,
+      page: result.page,
+      hasPrevPage: result.hasPrevPage,
+      hasNextPage: result.hasNextPage,
+      prevLink: result.prevPage
+        ? `/api/product?page=${result.prevPage}&limit=${limit}&query=${query}&sort=${sort}`
+        : null,
+      nextLink: result.nextPage
+        ? `/api/product?page=${result.nextPage}&limit=${limit}&query=${query}&sort=${sort}`
+        : null,
+    };
+
+    res.status(200).send(response);
   } catch (error) {
-    res.status(400).send({ error: `Error al consultar productos: ${error}` });
+    res.status(400).send({ status: "error", error: `Error al consultar productos: ${error}` });
   }
 });
 

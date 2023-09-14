@@ -17,31 +17,34 @@ const server = app.listen(PORT, () => {
   console.log(`Servidor abierto en http://localhost:${PORT}`);
 });
 
-const io = new Server(server);
-const mensajes = [];
+// const io = new Server(server);
+// const mensajes = [];
 
-io.on("connection", (socket) => {
-  console.log("Conexion con Socket.io");
+// io.on("connection", (socket) => {
+//   console.log("Conexion con Socket.io");
 
-  socket.on("nuevoProducto", async (prod) => {
-    console.log(prod);
-    await productManager.addProduct(prod);
-    const products = await productManager.getProducts();
-    socket.emit("products", products);
-  });
+//   socket.on("nuevoProducto", async (prod) => {
+//     console.log(prod);
+//     await productManager.addProduct(prod);
+//     const products = await productManager.getProducts();
+//     socket.emit("products", products);
+//   });
 
-  socket.on("mensaje", (info) => {
-    console.log(info);
-    mensajes.push(info);
-    io.emit("mensajes", mensajes);
-  });
-});
+//   socket.on("mensaje", (info) => {
+//     console.log(info);
+//     mensajes.push(info);
+//     io.emit("mensajes", mensajes);
+//   });
+// });
 
 mongoose
   .connect(
     `mongodb+srv://mativiglione22:1569874123mM@cluster22.qo7jgpz.mongodb.net/?retryWrites=true&w=majority`
   )
-  .then(() => console.log("DB conectada"))
+  .then(async () => {
+    console.log("DB conectada")
+    const resultados = await productModel.paginate({})
+  })
   .catch((error) => console.log("Error en conexion a MongoDB Atlas: ", error));
 
 
@@ -61,29 +64,29 @@ app.use("/api/product", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", userRouter);
 
-app.get("/static", async (req, res) => {
-  const prods = await productManager.getProducts();
+// app.get("/static", async (req, res) => {
+//   const prods = await productManager.getProducts();
 
-  res.render("home", {
-    titulo: "Home",
-    rutaCSS: "home",
-    rutaJS: "home",
-    products: prods,
-  });
-});
+//   res.render("home", {
+//     titulo: "Home",
+//     rutaCSS: "home",
+//     rutaJS: "home",
+//     products: prods,
+//   });
+// });
 
-app.get("/static/realTimeProducts", (req, res) => {
-  res.render("realTimeProducts", {
-    titulo: "Productos",
-    rutaCSS: "realTimeProducts",
-    rutaJS: "realTimeProducts",
-  });
-});
+// app.get("/static/realTimeProducts", (req, res) => {
+//   res.render("realTimeProducts", {
+//     titulo: "Productos",
+//     rutaCSS: "realTimeProducts",
+//     rutaJS: "realTimeProducts",
+//   });
+// });
 
-app.get("/static/chat", async (req, res) => {
-  res.render("chat", {
-    titulo: "Chat",
-    rutaJS: "chat",
-    rutaCSS: "chat",
-  });
-});
+// app.get("/static/chat", async (req, res) => {
+//   res.render("chat", {
+//     titulo: "Chat",
+//     rutaJS: "chat",
+//     rutaCSS: "chat",
+//   });
+// });
