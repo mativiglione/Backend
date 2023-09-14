@@ -8,16 +8,13 @@ productModel.plugin(paginate)
 
 productRouter.get("/", async (req, res) => {
   try {
-    // Obtener los parámetros de consulta
     const { limit = 10, page = 1, query, sort } = req.query;
 
-    // Construir la consulta
     const filters = {};
     if (query) {
-      filters.category = query; // Ajusta esto según tus necesidades
+      filters.category = query;
     }
 
-    // Realizar la consulta con paginación
     const options = {
       page: Number(page),
       limit: Number(limit),
@@ -26,7 +23,6 @@ productRouter.get("/", async (req, res) => {
 
     const result = await productModel.paginate(filters, options);
 
-    // Crear el objeto de respuesta
     const response = {
       status: "success",
       payload: result.docs,
