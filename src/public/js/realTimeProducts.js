@@ -11,7 +11,7 @@ form.addEventListener("submit", (e) => {
   socket.on("mensajeProductoCreado", (mensaje) => {
     Swal.fire(mensaje);
   });
-  e.target.reset()
+  e.target.reset();
 });
 
 socket.on("products", (products) => {
@@ -29,7 +29,6 @@ socket.on("products", (products) => {
           <p>Code: ${prod.code}</p>
           <p>Stock: ${prod.stock}</p>
         </div>
-      
         `;
   });
 });

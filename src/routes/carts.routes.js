@@ -1,35 +1,40 @@
 import { Router } from "express";
-import { CartManager } from "../controllers/cartManager.js";
-import { ProductManager } from "../controllers/productManager.js";
+import cartModel from "../models/carts.models.js";
 
-const productManager = new ProductManager("src/models/productos.txt");
-const cartManager = new CartManager("src/models/carts.txt");
+const cartRouter = Router();
 
-const routerCart = Router();
+cartRouter.post("/", async (reseq, res) => {
+    try{
+      const newCart = await cartModel.create({ products: [] })
+      res.status(200).send({ resultado: "Nuevo carrito creado", message: newCart})
+    } catch (error) {
+        res.status(400).send({ error: `Error al crear el nuevo carrito: ${error}`})
+    }
+})
 
-routerCart.post("/", async (req, res) => {
-  const newCart = await cartManager.createCart();
-  res.status(200).send(newCart);
-});
+cartRouter.get("/:cid", async (req,res) => {
+  const { cid } = req.params;
+  try{
+    const cart = await cartModel.findById(cid);
+    res.status(200).send({ resultado: "Carrito encontrado", message: cart});
+  } catch (error) {
+    res.status(400).send({ error: `Error al buscar el carrito: ${error}` });
+  }
+})
 
-routerCart.get("/:cid", async (req, res) => {
-  const cartId = parseInt(req.params.cid);
-  const cart = await cartManager.getCartById(cartId);
-
-  if (cart) {
-    res.status(200).json(cart.products);
-  } else {
-    res.status(400).send("Carrito no encontrado");
+cartRouter.post("/:cid/product/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+  const { quantity } = req.body;
+  try {
+    const cart = await cartModel.findById(cid);
+    if (cart) {
+      cart.products.products.push({ id_prod: pid, quantity: quantity });
+      const respuesta = await cartModel.findByIdAndUpdate(cid, cart); //actualizo carrito de la BDD con el nuevo prod
+      res.status(200).send({ respuesta: "Producto agregado al carrito", mensaje: respuesta });
+    }
+  } catch (error) {
+    res.status(400).send({ error: `Error al agregar el producto: ${error}` });
   }
 });
 
-routerCart.post("/:cid/product/:pid", async (req, res) => {
-  const cid = parseInt(req.params.cid);
-  const pid = parseInt(req.params.pid);
-  const updatedCart = await cartManager.addProductToCart(cid, pid);
-  updatedCart
-    ? res.status(200).send(updatedCart)
-    : res.status(400).send("Carrito no existe");
-});
-
-export default routerCart;
+export default cartRouter

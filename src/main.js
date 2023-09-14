@@ -1,12 +1,14 @@
 import express from "express";
-import multer from "multer";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
-import routerProd from "./routes/products.routes.js";
-import routerCart from "./routes/carts.routes.js";
+import userRouter from "./routes/user.routes.js";
+import productRouter from "./routes/products.routes.js";
+import cartRouter from "./routes/carts.routes.js";
+import mongoose from "mongoose";
 import { __dirname } from "./path.js";
 import path from "path";
-import { ProductManager } from "./controllers/productManager.js";
+import productModel from "./models/products.models.js";
+import cartModel from "./models/carts.models.js";
 
 const PORT = 8080;
 const app = express();
@@ -16,7 +18,6 @@ const server = app.listen(PORT, () => {
 });
 
 const io = new Server(server);
-const productManager = new ProductManager("src/models/productos.txt");
 const mensajes = [];
 
 io.on("connection", (socket) => {
@@ -36,16 +37,17 @@ io.on("connection", (socket) => {
   });
 });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/public/img");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}${file.originalname}`);
-  },
-});
+mongoose
+  .connect(
+    `mongodb+srv://mativiglione22:1569874123mM@cluster22.qo7jgpz.mongodb.net/?retryWrites=true&w=majority`
+  )
+  .then(() => console.log("DB conectada"))
+  .catch((error) => console.log("Error en conexion a MongoDB Atlas: ", error));
 
-const upload = multer({ storage: storage });
+
+  // index por categoria
+  // const resultados = await productModel.find({ category: "Deportes" }).explain('executionStats')
+  // console.log(resultados)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -54,8 +56,10 @@ app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname, "./views"));
 
 app.use("/static", express.static(path.join(__dirname, "/public")));
-app.use("/api/product", routerProd);
-app.use("/api/carts", routerCart);
+
+app.use("/api/product", productRouter);
+app.use("/api/carts", cartRouter);
+app.use("/api/users", userRouter);
 
 app.get("/static", async (req, res) => {
   const prods = await productManager.getProducts();
@@ -82,10 +86,4 @@ app.get("/static/chat", async (req, res) => {
     rutaJS: "chat",
     rutaCSS: "chat",
   });
-});
-
-app.post("/upload", upload.single("product"), (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
-  res.status(200).send("Imagen cargada");
 });
