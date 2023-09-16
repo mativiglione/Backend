@@ -42,15 +42,14 @@ mongoose
     `mongodb+srv://mativiglione22:1569874123mM@cluster22.qo7jgpz.mongodb.net/?retryWrites=true&w=majority`
   )
   .then(async () => {
-    console.log("DB conectada")
-    const resultados = await productModel.paginate({})
+    console.log("DB conectada");
+    const resultados = await productModel.paginate({});
   })
   .catch((error) => console.log("Error en conexion a MongoDB Atlas: ", error));
 
-
-  // index por categoria
-  // const resultados = await productModel.find({ category: "Deportes" }).explain('executionStats')
-  // console.log(resultados)
+// index por categoria
+// const resultados = await productModel.find({ category: "Deportes" }).explain('executionStats')
+// console.log(resultados)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -64,16 +63,18 @@ app.use("/api/product", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", userRouter);
 
-// app.get("/static", async (req, res) => {
-//   const prods = await productManager.getProducts();
+app.get("/static", async (req, res) => {
+  try {
+    const products = await productModel.findByIdAndUpdate({}, "title price");
 
-//   res.render("home", {
-//     titulo: "Home",
-//     rutaCSS: "home",
-//     rutaJS: "home",
-//     products: prods,
-//   });
-// });
+    res.render("home", {
+      titulo: "Home",
+      products: products,
+    });
+  } catch (error) {
+    res.status(400).send("Error al cargar productos.");
+  }
+});
 
 // app.get("/static/realTimeProducts", (req, res) => {
 //   res.render("realTimeProducts", {
