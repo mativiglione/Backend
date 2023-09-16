@@ -65,7 +65,8 @@ app.use("/api/users", userRouter);
 
 app.get("/static", async (req, res) => {
   try {
-    const products = await productModel.find({}, "title price");
+    const products = await productModel.find().lean;
+    console.log(products)
 
     res.render("home", {
       titulo: "Home",
