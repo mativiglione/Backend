@@ -2,8 +2,15 @@ import { Router } from "express";
 import cartModel from "../models/carts.models.js";
 
 const cartRouter = Router();
-
-cartRouter.post("/", async (reseq, res) => {
+cartRouter.get("/", async (req, res) => {
+  try {
+    const carts = await cartModel.find();
+    res.status(200).send(carts);
+  } catch (error) {
+    res.status(400).send("Carrito no existe");
+  }
+});
+cartRouter.post("/", async (req, res) => {
   try {
     const newCart = await cartModel.create({ products: [] });
     res
@@ -33,7 +40,7 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
     const cart = await cartModel.findById(cid);
     if (cart) {
       cart.products.products.push({ id_prod: pid, quantity: quantity });
-      const respuesta = await cartModel.findByIdAndUpdate(cid, cart); //actualizo carrito de la BDD con el nuevo prod
+      const respuesta = await cartModel.findByIdAndUpdate(cid, cart);
       res.status(200).send({
         respuesta: "Producto agregado al carrito",
         mensaje: respuesta,
@@ -49,9 +56,12 @@ cartRouter.delete("/:cid/product/:pid", async (req, res) => {
   try {
     const cart = await cartModel.findById(cid);
     if (cart) {
-      cart.products.products = cart.products.products.filter(
-        (product) => product.id_prod.toString() !== pid
+      const indice = cart.products.products.findIndex(
+        (prod) => prod.id_prod._id == pid
       );
+      if (indice != -1) {
+        cart.products.products.splice(indice, 1);
+      }
       const respuesta = await cart.save();
       res.status(200).send({
         respuesta: "Producto eliminado del carrito",
@@ -69,13 +79,13 @@ cartRouter.delete("/:cid/product/:pid", async (req, res) => {
 
 cartRouter.put("/:cid", async (req, res) => {
   const { cid } = req.params;
-  const { products } = req.body;
+  const products = req.body;
   try {
     const cart = await cartModel.findById(cid);
     if (cart) {
       products.forEach((product) => {
         const prod = cart.products.products.find(
-          (p) => p.id_prod.toString() === product.id_prod
+          (p) => p.id_prod._id == product.id_prod
         );
         if (prod) {
           prod.quantity += product.quantity;
@@ -102,7 +112,7 @@ cartRouter.put("/:cid/product/:pid", async (req, res) => {
     const cart = await cartModel.findById(cid);
     if (cart) {
       const productIndex = cart.products.products.findIndex(
-        (product) => product.id_prod.toString() === pid
+        (product) => product.id_prod._id == pid
       );
       if (productIndex !== -1) {
         cart.products.products[productIndex].quantity = quantity;
@@ -129,21 +139,17 @@ cartRouter.delete("/:cid", async (req, res) => {
     if (cart) {
       cart.products.products = [];
       const respuesta = await cart.save();
-      res
-        .status(200)
-        .send({
-          respuesta: "Todos los productos fueron eliminados del carrito",
-          message: respuesta,
-        });
+      res.status(200).send({
+        respuesta: "Todos los productos fueron eliminados del carrito",
+        message: respuesta,
+      });
     } else {
       res.status(404).send({ respuesta: "Carrito no encontrado" });
     }
   } catch (error) {
-    res
-      .status(400)
-      .send({
-        error: `Error al eliminar todos los productos del carrito: ${error}`,
-      });
+    res.status(400).send({
+      error: `Error al eliminar todos los productos del carrito: ${error}`,
+    });
   }
 });
 

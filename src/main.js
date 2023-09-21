@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
@@ -9,6 +10,7 @@ import { __dirname } from "./path.js";
 import path from "path";
 import productModel from "./models/products.models.js";
 import cartModel from "./models/carts.models.js";
+import cookieParser from "cookie-parser";
 
 const PORT = 8080;
 const app = express();
@@ -38,9 +40,7 @@ const server = app.listen(PORT, () => {
 // });
 
 mongoose
-  .connect(
-    `mongodb+srv://mativiglione22:1569874123mM@cluster22.qo7jgpz.mongodb.net/?retryWrites=true&w=majority`
-  )
+  .connect(process.env.MONGO_URL)
   .then(async () => {
     console.log("DB conectada");
     const resultados = await productModel.paginate({});
@@ -52,6 +52,7 @@ mongoose
 // console.log(resultados)
 
 app.use(express.json());
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -63,10 +64,24 @@ app.use("/api/product", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", userRouter);
 
+app.get("/setCookie", (req, res) => {
+  res
+    .cookie("CookieCookie", "Esto es el valor de una cookie", {
+      maxAge: 60000,
+      signed: true,
+    })
+    .send("Cookie creada");
+});
+
+app.get("/getCookie", (req, res) => {
+  res.send(req.signedCookies); // CONSULTAR SOLO LAS COOKIES FIRMADAS
+  // res.send(req.cookies) CONSULTAR TODAS LAS COOKIES
+});
+
 app.get("/static", async (req, res) => {
   try {
     const products = await productModel.find().lean;
-    console.log(products)
+    console.log(products);
 
     res.render("home", {
       titulo: "Home",
