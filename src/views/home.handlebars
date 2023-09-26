@@ -5,4 +5,8 @@
       <li>{{this.title}} - ${{this.price}}</li>
     {{/each}}
   </ul>
+
+  <form action="/api/sessions/logout" method="GET">
+    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+  </form>
 </div>

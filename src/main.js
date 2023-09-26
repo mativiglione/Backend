@@ -117,12 +117,9 @@ app.get("/session", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  req.session.email = email;
-  req.session.password = password;
-
-  return res.send("Usuario logueado");
+  res.render("login", {
+      titulo: "Iniciar Sesión"
+  });
 });
 
 app.get("/admin", auth, (req, res) => {
@@ -137,7 +134,7 @@ app.get("/logout", (req, res) => {
 
 app.get("/static", async (req, res) => {
   try {
-    const products = await productModel.find().lean;
+    const products = await productModel.find().lean();
     console.log(products);
 
     res.render("home", {
