@@ -21,26 +21,6 @@ const server = app.listen(PORT, () => {
   console.log(`Servidor abierto en http://localhost:${PORT}`);
 });
 
-// const io = new Server(server);
-// const mensajes = [];
-
-// io.on("connection", (socket) => {
-//   console.log("Conexion con Socket.io");
-
-//   socket.on("nuevoProducto", async (prod) => {
-//     console.log(prod);
-//     await productManager.addProduct(prod);
-//     const products = await productManager.getProducts();
-//     socket.emit("products", products);
-//   });
-
-//   socket.on("mensaje", (info) => {
-//     console.log(info);
-//     mensajes.push(info);
-//     io.emit("mensajes", mensajes);
-//   });
-// });
-
 mongoose
   .connect(process.env.MONGO_URL)
   .then(async () => {
@@ -48,10 +28,6 @@ mongoose
     const resultados = await productModel.paginate({});
   })
   .catch((error) => console.log("Error en conexion a MongoDB Atlas: ", error));
-
-// index por categoria
-// const resultados = await productModel.find({ category: "Deportes" }).explain('executionStats')
-// console.log(resultados)
 
 app.use(express.json());
 app.use(cookieParser(process.env.SIGNED_COOKIE));
@@ -86,7 +62,6 @@ app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname, "./views"));
 
 app.use("/static", express.static(path.join(__dirname, "/public")));
-
 app.use("/api/product", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", userRouter);
@@ -160,5 +135,25 @@ app.get("/static", async (req, res) => {
 //     titulo: "Chat",
 //     rutaJS: "chat",
 //     rutaCSS: "chat",
+//   });
+// });
+
+// const io = new Server(server);
+// const mensajes = [];
+
+// io.on("connection", (socket) => {
+//   console.log("Conexion con Socket.io");
+
+//   socket.on("nuevoProducto", async (prod) => {
+//     console.log(prod);
+//     await productManager.addProduct(prod);
+//     const products = await productManager.getProducts();
+//     socket.emit("products", products);
+//   });
+
+//   socket.on("mensaje", (info) => {
+//     console.log(info);
+//     mensajes.push(info);
+//     io.emit("mensajes", mensajes);
 //   });
 // });
