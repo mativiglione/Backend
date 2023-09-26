@@ -1,4 +1,8 @@
 <div class="container d-flex flex-column">
+{{#if session.user}}
+    <p>Bienvenido, {{session.user.first_name}} {{session.user.last_name}}.</p>
+  {{/if}}
+
   <h1 class="text-center">Productos creados</h1>
   <ul class="text-center list-unstyled">
     {{#each products}}

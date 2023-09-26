@@ -13,6 +13,8 @@ sessionRouter.post("/login", async (req, res) => {
     if (user) {
       if (user.password === password) {
         req.session.login = true;
+        req.session.user = user;
+        console.log(req.session);
         res.redirect("/static");
       } else {
         res.status(401).send({ resultado: "No autorizado", message: user });
@@ -28,9 +30,8 @@ sessionRouter.post("/login", async (req, res) => {
 sessionRouter.get("/logout", (req, res) => {
   if (req.session.login) {
     req.session.destroy();
-    res.redirect("/login")
-  } else
-  res.status(401).send({ resultado: "No autorizado" });
+    res.redirect("/login");
+  } else res.status(401).send({ resultado: "No autorizado" });
 });
 
 export default sessionRouter;

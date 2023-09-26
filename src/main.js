@@ -102,8 +102,7 @@ app.get("/setCookie", (req, res) => {
 });
 
 app.get("/getCookie", (req, res) => {
-  res.send(req.signedCookies); // CONSULTAR SOLO LAS COOKIES FIRMADAS
-  // res.send(req.cookies) CONSULTAR TODAS LAS COOKIES
+  res.send(req.signedCookies);
 });
 
 app.get("/session", (req, res) => {
