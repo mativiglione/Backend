@@ -30,7 +30,7 @@ sessionRouter.post("/login", async (req, res) => {
 sessionRouter.get("/logout", (req, res) => {
   if (req.session.login) {
     req.session.destroy();
-    res.redirect("/login");
+    res.redirect("/static/login");
   } else res.status(401).send({ resultado: "No autorizado" });
 });
 

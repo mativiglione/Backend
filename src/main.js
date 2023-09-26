@@ -115,9 +115,10 @@ app.get("/session", (req, res) => {
   }
 });
 
-app.get("/login", (req, res) => {
+app.get("/static/login", (req, res) => {
   res.render("login", {
-      titulo: "Iniciar Sesión"
+      titulo: "Iniciar Sesión",
+      rutaCSS: "login",
   });
 });
 
@@ -139,6 +140,7 @@ app.get("/static", async (req, res) => {
     res.render("home", {
       titulo: "Home",
       products: products,
+      rutaCSS: "home",
     });
   } catch (error) {
     res.status(400).send("Error al cargar productos.");

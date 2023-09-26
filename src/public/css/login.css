@@ -1,0 +1,15 @@
+body {
+  background-color: whitesmoke;
+  margin: 0;
+}
+
+.card-title {
+  margin-top: 20px;
+  color: #37003c;
+  margin-bottom: 20px;
+}
+
+.btn {
+    color: whitesmoke;
+    background-color: #37003c;
+}
