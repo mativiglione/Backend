@@ -6,12 +6,14 @@ import userRouter from "./routes/users.routes.js";
 import productRouter from "./routes/products.routes.js";
 import sessionRouter from "./routes/session.routes.js";
 import cartRouter from "./routes/carts.routes.js";
+import passport from "passport";
 import mongoose from "mongoose";
 import { __dirname } from "./path.js";
 import path from "path";
 import productModel from "./models/products.models.js";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
+import initializePassport from "./config/passport.js";
 // import { Server } from "socket.io";
 
 const PORT = 8080;
@@ -43,6 +45,10 @@ app.use(
     saveUninitialized: true,
   })
 );
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 function auth(req, res, next) {
   console.log(req.session.email);
 
@@ -110,12 +116,13 @@ app.get("/logout", (req, res) => {
 app.get("/static", async (req, res) => {
   try {
     const products = await productModel.find().lean();
-    console.log(products);
+    const info = req.query.info;
 
     res.render("home", {
       titulo: "Home",
-      products: products,
       rutaCSS: "home",
+      info,
+      products
     });
   } catch (error) {
     res.status(400).send("Error al cargar productos.");
