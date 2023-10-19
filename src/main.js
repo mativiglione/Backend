@@ -2,10 +2,7 @@ import "dotenv/config";
 import express from "express";
 import session from "express-session";
 import { engine } from "express-handlebars";
-import userRouter from "./routes/users.routes.js";
-import productRouter from "./routes/products.routes.js";
-import sessionRouter from "./routes/session.routes.js";
-import cartRouter from "./routes/carts.routes.js";
+import router from "./routes/index.routes.js"
 import passport from "passport";
 import mongoose from "mongoose";
 import { __dirname } from "./path.js";
@@ -49,69 +46,13 @@ initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
 
-function auth(req, res, next) {
-  console.log(req.session.email);
-
-  if (
-    req.session.email == "admin@admin.com" &&
-    req.session.password == "1234"
-  ) {
-    return next();
-  }
-
-  return res.send("No tenes acceso a este contenido");
-}
-
 app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname, "./views"));
 
+app.use("/", router)
 app.use("/static", express.static(path.join(__dirname, "/public")));
-app.use("/api/product", productRouter);
-app.use("/api/carts", cartRouter);
-app.use("/api/users", userRouter);
-app.use("/api/sessions", sessionRouter)
-
-app.get("/setCookie", (req, res) => {
-  res
-    .cookie("CookieCookie", "Esto es el valor de una cookie", {
-      maxAge: 60000,
-      signed: true,
-    })
-    .send("Cookie creada");
-});
-
-app.get("/getCookie", (req, res) => {
-  res.send(req.signedCookies);
-});
-
-app.get("/session", (req, res) => {
-  if (req.session.counter) {
-    req.session.counter++;
-    res.send(`Entraste ${req.session.counter} veces a mi pagina`);
-  } else {
-    req.session.counter = 1;
-    res.send("Hola por primera vez");
-  }
-});
-
-app.get("/static/login", (req, res) => {
-  res.render("login", {
-      titulo: "Iniciar Sesión",
-      rutaCSS: "login",
-  });
-});
-
-app.get("/admin", auth, (req, res) => {
-  res.send("Sos admin");
-});
-
-app.get("/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.send("Salio de la sesion");
-  });
-});
 
 app.get("/static", async (req, res) => {
   try {
@@ -128,6 +69,14 @@ app.get("/static", async (req, res) => {
     res.status(400).send("Error al cargar productos.");
   }
 });
+
+app.get("/static/login", (req, res) => {
+  res.render("login", {
+      titulo: "Iniciar Sesión",
+      rutaCSS: "login",
+  });
+});
+
 
 // app.get("/static/realTimeProducts", (req, res) => {
 //   res.render("realTimeProducts", {

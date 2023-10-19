@@ -1,5 +1,6 @@
 import { Router } from "express";
 import productModel from "../models/products.models.js";
+import { passportError, authorization } from "../utils/messageErrors.js";
 
 const productRouter = Router();
 
@@ -54,22 +55,19 @@ productRouter.get("/:id", async (req, res) => {
   }
 });
 
-productRouter.post("/", async (req, res) => {
-  const { title, description, stock, code, category, price } = req.body;
+productRouter.post('/', passportError('jwt'), authorization('Admin'), async (req, res) => {
+  const { title, description, stock, code, price, category } = req.body
+
   try {
-    const respuesta = await productModel.create({
-      title,
-      description,
-      stock,
-      code,
-      price,
-      category,
-    });
-    res.status(200).send({ resultado: "Producto creado", message: respuesta });
+      const respuesta = await productModel.create({
+          title, description, stock, code, price, category
+      })
+
+      res.status(200).send({ resultado: 'Producto creado', message: respuesta })
   } catch (error) {
-    res.status(400).send({ error: `Error al crear producto: ${error}` });
+      res.status(400).send({ error: `Error al crear producto: ${error}` })
   }
-});
+})
 
 productRouter.put("/:id", async (req, res) => {
   const { id } = req.params;

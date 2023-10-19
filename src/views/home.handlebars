@@ -1,6 +1,6 @@
 <div class="container d-flex flex-column align-items-center">
 {{#if info}}
-    <p class="text-center">Bienvenido, {{info}}.</p>
+    <p class="text-center">Bienvenido/a, {{info}}.</p>
   {{/if}}
 
   <h1 class="text-center">Productos creados</h1>
@@ -10,7 +10,7 @@
     {{/each}}
   </ul>
 
-  <form action="/api/sessions/logout" method="GET" class="text-center">
+  <form action="/api/sessions/logout" method="POST" class="text-center">
     <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
   </form>
 </div>
