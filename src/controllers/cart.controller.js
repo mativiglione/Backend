@@ -1,4 +1,5 @@
 import cartModel from "../models/carts.models.js";
+import ticketModel from "../models/ticket.models.js";
 
 export const getCarts = async (req, res) => {
     try {
@@ -168,4 +169,43 @@ export const addToCart = async (req, res) => {
         error: `Error al eliminar todos los productos del carrito: ${error}`,
       });
     }
+  };
+
+  export const completePurchase = async (req, res) => {
+    const { cid } = req.params;
+  
+    try {
+      const cart = await cartModel.findById(cid);
+      const unprocessedProducts = await processProducts(cart.products.products);
+  
+      const ticket = await generateTicket({
+        purchaser: cart.purchaser,
+        products: unprocessedProducts,
+      });
+  
+      cart.products.products = unprocessedProducts;
+      await cart.save();
+  
+      res.status(200).send({ message: "Compra completada", ticket });
+    } catch (error) {
+      res.status(500).send({ error: `Error al completar la compra: ${error}` });
+    }
+  };
+    const processProducts = async (products) => {
+    const unprocessedProducts = [];
+  
+    for (const product of products) {
+      unprocessedProducts.push(product);
+    }
+  
+    return unprocessedProducts;
+  };
+  
+  const generateTicket = async ({ purchaser, products }) => {
+    const ticket = await ticketModel.create({
+      purchaser,
+      products,
+    });
+  
+    return ticket;
   };
