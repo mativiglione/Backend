@@ -1,6 +1,7 @@
 import cartModel from "../models/carts.models.js";
 import ticketModel from "../models/ticket.models.js";
-import productModel from "../models/products.models.js"
+import productModel from "../models/products.models.js";
+import userModel from "../models/users.models.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const getCarts = async (req, res) => {
@@ -180,10 +181,21 @@ export const completePurchase = async (req, res) => {
 
   try {
     const cart = await cartModel.findById(cid);
+
+    const users = await userModel.find({ cart: cart._id });
+
+    if (users.length === 0) {
+      return res
+        .status(404)
+        .send({ error: "Usuario no encontrado para el carrito." });
+    }
+
+    const user = users[0];
+
     const unprocessedProducts = await processProducts(cart.products.products);
 
     const ticket = await generateTicket({
-      purchaser: cart.purchaser,
+      purchaser: user.email,
       products: unprocessedProducts,
     });
 
