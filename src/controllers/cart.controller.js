@@ -199,7 +199,7 @@ export const completePurchase = async (req, res) => {
       products: unprocessedProducts,
     });
 
-    cart.products.products = unprocessedProducts;
+    cart.products.products = [];
     await cart.save();
 
     res.status(200).send({ message: "Compra completada", ticket });
