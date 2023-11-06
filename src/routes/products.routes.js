@@ -7,7 +7,7 @@ const productRouter = Router();
 productRouter.get("/", productController.getProducts);
 productRouter.get("/:id", productController.getProduct);
 productRouter.post('/', passportError('jwt'), authorization('Admin'), productController.postProduct);
-productRouter.put("/:id", productController.putProduct);
-productRouter.delete("/:id", productController.deleteProduct);
+productRouter.put("/:id", passportError('jwt'), authorization('Admin'), productController.putProduct);
+productRouter.delete("/:id", passportError('jwt'), authorization('Admin'), productController.deleteProduct);
 
 export default productRouter

@@ -5,9 +5,9 @@ const cartRouter = Router();
 
 
 cartRouter.get("/", cartController.getCarts);
-cartRouter.post("/", cartController.createCart);
+cartRouter.post("/",  cartController.createCart);
 cartRouter.get("/:cid", cartController.getCart);
-cartRouter.post("/:cid/product/:pid", cartController.addToCart);
+cartRouter.post("/:cid/product/:pid", passportError('jwt'), authorization('User'),cartController.addToCart);
 cartRouter.delete("/:cid/product/:pid", cartController.removeFromCart);
 cartRouter.put("/:cid", cartController.updateCart);
 cartRouter.put("/:cid/product/:pid", cartController.updateProductInCart);

@@ -102,7 +102,7 @@ export const updateCart = async (req, res) => {
         if (existingProduct) {
           existingProduct.quantity += product.quantity;
         } else {
-          cart.products.push(product);
+          cart.products.products.push(product);
         }
       });
 
