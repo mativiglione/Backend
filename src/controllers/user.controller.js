@@ -1,4 +1,6 @@
 import userModel from "../models/users.models.js";
+import EErrors from "../services/enums.js";
+import { generateUserErrorInfo } from "../services/info.js";
 
 export const registerUser = async (req, res) => {
     try {

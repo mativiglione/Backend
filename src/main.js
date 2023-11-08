@@ -11,6 +11,7 @@ import productModel from "./models/products.models.js";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import initializePassport from "./config/passport.js";
+import { faker } from "@faker-js/faker"
 // import { Server } from "socket.io";
 
 const PORT = 8080;
@@ -76,6 +77,35 @@ app.get("/static/login", (req, res) => {
       rutaCSS: "login",
   });
 });
+
+
+const modelProduct = () => {
+  return {
+     _id: faker.database.mongodbObjectId(),
+     title: faker.commerce.product(),
+     description: faker.commerce.productDescription(),
+     category: faker.commerce.productAdjective(),
+     stock: faker.number.binary(),
+     price: faker.commerce.price({ min: 100, max: 200 }),
+     code: faker.lorem.word(5),
+
+  }
+}
+
+const createRandomProduct = (cantProducts) => {
+  const products = []
+
+  for(let i = 0; i < cantProducts; i++) {
+    products.push(modelProduct())
+  }
+
+  return products
+}
+
+app.get("/mockingproducts", (req,res) => {
+  const products = createRandomProduct(100);
+  res.json(products);
+})
 
 
 // app.get("/static/realTimeProducts", (req, res) => {

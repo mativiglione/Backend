@@ -10,4 +10,5 @@ productRouter.post('/', passportError('jwt'), authorization('Admin'), productCon
 productRouter.put("/:id", passportError('jwt'), authorization('Admin'), productController.putProduct);
 productRouter.delete("/:id", passportError('jwt'), authorization('Admin'), productController.deleteProduct);
 
+
 export default productRouter
