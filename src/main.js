@@ -11,7 +11,8 @@ import productModel from "./models/products.models.js";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import initializePassport from "./config/passport.js";
-import { faker } from "@faker-js/faker"
+import { faker } from "@faker-js/faker";
+import loggerTestRouter from './routes/loggerTest.js';
 // import { Server } from "socket.io";
 
 const PORT = 8080;
@@ -55,6 +56,8 @@ app.set("views", path.resolve(__dirname, "./views"));
 app.use("/", router)
 app.use("/static", express.static(path.join(__dirname, "/public")));
 
+app.use(loggerTestRouter);
+
 app.get("/static", async (req, res) => {
   try {
     const products = await productModel.find().lean();
@@ -91,7 +94,6 @@ const modelProduct = () => {
 
   }
 }
-
 const createRandomProduct = (cantProducts) => {
   const products = []
 
@@ -106,6 +108,7 @@ app.get("/mockingproducts", (req,res) => {
   const products = createRandomProduct(100);
   res.json(products);
 })
+
 
 
 // app.get("/static/realTimeProducts", (req, res) => {

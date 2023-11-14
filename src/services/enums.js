@@ -1,7 +1,5 @@
 const EErrors = {
-    ROUTING_ERROR: 1,
-    CONTROLLERS_ERROR: 2,
-    INVALID_TYPES_ERROR: 3,
-    DATABASE_ERROR: 4
+    USERS_ERROR: 1,
+    PRODUCTS_ERROR: 2
 }
 export default EErrors;
