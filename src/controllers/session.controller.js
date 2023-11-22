@@ -20,6 +20,9 @@ export const loginUser = async (req, res) => {
 
     res.redirect(`/static?info=${req.session.user.first_name}`);
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(500).send({ mensaje: `Error al iniciar sesion: ${error}` });
   }
 };

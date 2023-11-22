@@ -19,78 +19,104 @@ export const getProducts = async (req, res) => {
 
     res.status(404).send({ error: "Productos no encontrados" });
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(500).send({ error: `Error en consultar productos: ${error}` });
   }
 };
 
 export const getProduct = async (req, res) => {
-    const {id} = req.params
-    try {
-        const product = await productModel.findById(id)
-    
-        if (product) {
-          return res.status(200).send(product);
-        }
-    
-        res.status(404).send({ error: "Producto no encontrado" });
-      } catch (error) {
-        res.status(500).send({ error: `Error en consultar producto: ${error}` });
-      }
+  const { id } = req.params;
+  try {
+    const product = await productModel.findById(id);
+
+    if (product) {
+      return res.status(200).send(product);
+    }
+
+    res.status(404).send({ error: "Producto no encontrado" });
+  } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
+    res.status(500).send({ error: `Error en consultar producto: ${error}` });
+  }
 };
 
 export const postProduct = async (req, res) => {
+  const { title, description, code, price, stock, category } = req.body;
 
-    const { title, description, code, price, stock, category } = req.body
+  try {
+    const product = await productModel.create({
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+    });
 
-    try {
-        const product = await productModel.create({ title, description, code, price, stock, category })
-
-        if (product) {
-            return res.status(201).send(product)
-        }
-
-        res.status(404).send({ error: "Producto no encontrado" })
-
-    } catch (error) {
-        if (error.code == 11000) {
-            return res.status(400).send({ error: `Llave duplicada` })
-        } else {
-            return res.status(500).send({ error: `Error en consultar producto ${error}` })
-        }
-
+    if (product) {
+      return res.status(201).send(product);
     }
-}
+
+    res.status(404).send({ error: "Producto no encontrado" });
+  } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
+    if (error.code == 11000) {
+      return res.status(400).send({ error: `Llave duplicada` });
+    } else {
+      return res
+        .status(500)
+        .send({ error: `Error en consultar producto ${error}` });
+    }
+  }
+};
 
 export const putProduct = async (req, res) => {
-    const { id } = req.params
-    const { title, description, code, price, stock, category } = req.body
-    try {
-        const product = await productModel.findByIdAndUpdate(id, { title, description, code, price, stock, category })
+  const { id } = req.params;
+  const { title, description, code, price, stock, category } = req.body;
+  try {
+    const product = await productModel.findByIdAndUpdate(id, {
+      title,
+      description,
+      code,
+      price,
+      stock,
+      category,
+    });
 
-        if (product) {
-            return res.status(200).send(product)
-        }
-
-        res.status(404).send({ error: "Producto no encontrado" })
-
-    } catch (error) {
-        res.status(500).send({ error: `Error en actualizar producto ${error}` })
+    if (product) {
+      return res.status(200).send(product);
     }
-}
+
+    res.status(404).send({ error: "Producto no encontrado" });
+  } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
+    res.status(500).send({ error: `Error en actualizar producto ${error}` });
+  }
+};
 
 export const deleteProduct = async (req, res) => {
-    const { id } = req.params
+  const { id } = req.params;
 
-    try {
-        const product = await productModel.findByIdAndDelete(id)
+  try {
+    const product = await productModel.findByIdAndDelete(id);
 
-        if (product) {
-            return res.status(200).send(product)
-        }
-
-        res.status(404).send({ error: "Producto no encontrado" })
-
-    } catch (error) {
-        res.status(500).send({ error: `Error en eliminar producto ${error}` })
+    if (product) {
+      return res.status(200).send(product);
     }
-}
+
+    res.status(404).send({ error: "Producto no encontrado" });
+  } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
+    res.status(500).send({ error: `Error en eliminar producto ${error}` });
+  }
+};

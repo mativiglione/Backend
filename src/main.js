@@ -12,7 +12,8 @@ import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import initializePassport from "./config/passport.js";
 import { faker } from "@faker-js/faker";
-import loggerTestRouter from './routes/loggerTest.js';
+import loggerTestRouter from "./routes/logger.routes.js"
+import { requestLogger } from "./middlewares/requestLogger.js";//Importo el meddleware que va a logear cada llamada por consola.
 // import { Server } from "socket.io";
 
 const PORT = 8080;
@@ -52,11 +53,12 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname, "./views"));
+app.use(requestLogger)//---------------------------------Aca aplico el middleware
 
 app.use("/", router)
 app.use("/static", express.static(path.join(__dirname, "/public")));
 
-app.use(loggerTestRouter);
+
 
 app.get("/static", async (req, res) => {
   try {

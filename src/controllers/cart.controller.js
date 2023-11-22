@@ -9,6 +9,10 @@ export const getCarts = async (req, res) => {
     const carts = await cartModel.find();
     res.status(200).send(carts);
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
+
     res.status(400).send("Carrito no existe");
   }
 };
@@ -20,6 +24,9 @@ export const createCart = async (req, res) => {
       .status(200)
       .send({ resultado: "Nuevo carrito creado", message: newCart });
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res
       .status(400)
       .send({ error: `Error al crear el nuevo carrito: ${error}` });
@@ -32,6 +39,9 @@ export const getCart = async (req, res) => {
     const cart = await cartModel.findById(cid);
     res.status(200).send({ resultado: "Carrito encontrado", message: cart });
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(400).send({ error: `Error al buscar el carrito: ${error}` });
   }
 };
@@ -55,6 +65,9 @@ export const addToCart = async (req, res) => {
       res.status(404).send({ respuesta: "Carrito no encontrado" });
     }
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(400).send({ error: `Error al agregar el producto: ${error}` });
   }
 };
@@ -80,6 +93,9 @@ export const removeFromCart = async (req, res) => {
       res.status(404).send({ respuesta: "Carrito no encontrado" });
     }
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res
       .status(400)
       .send({ error: `Error al eliminar el producto del carrito: ${error}` });
@@ -116,6 +132,9 @@ export const updateCart = async (req, res) => {
       res.status(404).send({ respuesta: "Carrito no encontrado" });
     }
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(400).send({ error: `Error al actualizar el carrito: ${error}` });
   }
 };
@@ -146,6 +165,9 @@ export const updateProductInCart = async (req, res) => {
       res.status(404).send({ respuesta: "Carrito no encontrado" });
     }
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(400).send({
       error: `Error al actualizar la cantidad del producto en el carrito: ${error}`,
     });
@@ -170,6 +192,9 @@ export const clearCart = async (req, res) => {
       res.status(404).send({ respuesta: "Carrito no encontrado" });
     }
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(400).send({
       error: `Error al eliminar todos los productos del carrito: ${error}`,
     });
@@ -204,6 +229,9 @@ export const completePurchase = async (req, res) => {
 
     res.status(200).send({ message: "Compra completada", ticket });
   } catch (error) {
+    logger.error(
+      `[ERROR] - Date: ${new Date().toLocaleString()} - ${error.message}`
+    );
     res.status(500).send({ error: `Error al completar la compra: ${error}` });
   }
 };

@@ -1,10 +1,10 @@
-import express from 'express';
-import { getLogger } from '../utils/logger.js';
+import { Router } from "express";
+import { logger } from '../utils/logger.js';
 
-const router = express.Router();
-const logger = getLogger();
+const loggerRouter = Router();//Aca acomodar un poco para mantener la logica de los otros controllers, importarlo al index.routes, etc.
 
-router.get('/loggerTest', (req, res) => {
+
+loggerRouter.get('/loggerTest', (req, res) => {
   logger.debug('This is a debug message.');
   logger.http('This is an HTTP message.');
   logger.info('This is an info message.');
@@ -15,4 +15,4 @@ router.get('/loggerTest', (req, res) => {
   res.send('Logging test completed. Check your logs.');
 });
 
-export default router;
+export default loggerRouter;
