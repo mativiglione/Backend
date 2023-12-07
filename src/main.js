@@ -14,6 +14,8 @@ import initializePassport from "./config/passport.js";
 import { faker } from "@faker-js/faker";
 import loggerTestRouter from "./routes/logger.routes.js"
 import { requestLogger } from "./middlewares/requestLogger.js";//Importo el meddleware que va a logear cada llamada por consola.
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 // import { Server } from "socket.io";
 
 const PORT = 8080;
@@ -111,7 +113,22 @@ app.get("/mockingproducts", (req,res) => {
   res.json(products);
 })
 
+const swaggerOptions = {
+  definition: {
+    openapi: "3.1.0",
+    info: {
+      title: "Documentacion del curso de Backend",
+      description: "API Coderhouse Backend",
+    }
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`]
+}
 
+// ** = cualquier subcarpeta
+// * = cualquier nombre de archivo
+
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 // app.get("/static/realTimeProducts", (req, res) => {
 //   res.render("realTimeProducts", {
