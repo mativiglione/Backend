@@ -1,11 +1,76 @@
 paths:
   /api/product/:
-  get:
-  summary: Obtener todos los productos
-  tags:
-    - Products
-  responses:
-  '200':
-    description: Productos obtenidos satisfactoriamente
-  '500':
-    description: Error interno del servidor al obtener los productos
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Productos obtenidos satisfactoriamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Error interno del servidor al obtener los productos
+    
+  /api/product/{id}:
+    get:
+      summary: Obtener un solo producto dado su id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          schema:
+            $type: String
+          description: Id del producto a buscar
+      responses:
+        '200':
+          description: Producto obtenido satisfactoriamente
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Error interno del servidor al obtener los productos
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de MongoDb
+        title:
+          type: String
+          description: Titulo del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        category:
+          type: String
+          description: Categoria del producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto
+        price:
+          type: Number
+          description: Precio del producto
+      
+      example:
+        _id: ObjectId('1232fdss132')
+        title: Fortnite
+        description: Juego de Disparos
+        category: Battle Royale
+        stock: '50'
+        price: '10000'
+
+
+
+      
