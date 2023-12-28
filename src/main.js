@@ -129,39 +129,3 @@ const swaggerOptions = {
 
 const specs = swaggerJSDoc(swaggerOptions)
 app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
-
-// app.get("/static/realTimeProducts", (req, res) => {
-//   res.render("realTimeProducts", {
-//     titulo: "Productos",
-//     rutaCSS: "realTimeProducts",
-//     rutaJS: "realTimeProducts",
-//   });
-// });
-
-// app.get("/static/chat", async (req, res) => {
-//   res.render("chat", {
-//     titulo: "Chat",
-//     rutaJS: "chat",
-//     rutaCSS: "chat",
-//   });
-// });
-
-// const io = new Server(server);
-// const mensajes = [];
-
-// io.on("connection", (socket) => {
-//   console.log("Conexion con Socket.io");
-
-//   socket.on("nuevoProducto", async (prod) => {
-//     console.log(prod);
-//     await productManager.addProduct(prod);
-//     const products = await productManager.getProducts();
-//     socket.emit("products", products);
-//   });
-
-//   socket.on("mensaje", (info) => {
-//     console.log(info);
-//     mensajes.push(info);
-//     io.emit("mensajes", mensajes);
-//   });
-// });
