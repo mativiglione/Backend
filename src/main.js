@@ -16,7 +16,7 @@ import loggerTestRouter from "./routes/logger.routes.js"
 import { requestLogger } from "./middlewares/requestLogger.js";//Importo el meddleware que va a logear cada llamada por consola.
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
-// import { Server } from "socket.io";
+
 
 const PORT = 8080;
 const app = express();
@@ -59,6 +59,10 @@ app.use(requestLogger)//---------------------------------Aca aplico el middlewar
 
 app.use("/", router)
 app.use("/static", express.static(path.join(__dirname, "/public")));
+
+app.use("/uploads/profiles", express.static("uploads/profiles"));
+app.use("/uploads/products", express.static("uploads/products"));
+app.use("/uploads/documents", express.static("uploads/documents"));
 
 
 
